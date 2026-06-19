@@ -12,7 +12,6 @@ def sensor_producer(data_queue: Queue):
     while True:
         tick += 1
         
-        # 1. Simulate standard operating cycles (Sine waves + noise)
         base_temp = 65.0 + 5.0 * math.sin(tick * 0.05)
         temperature = base_temp + random.uniform(-0.8, 0.8)
         
@@ -22,7 +21,6 @@ def sensor_producer(data_queue: Queue):
         base_press = 4.0 + 0.2 * math.sin(tick * 0.08)
         pressure = base_press + random.uniform(-0.1, 0.1)
         
-        # 2. Randomly inject dynamic industrial anomalies (~2% probability)
         if random.random() > 0.98:
             fault_type = random.choice(["thermal", "vibration", "pressure"])
             if fault_type == "thermal":
@@ -32,7 +30,6 @@ def sensor_producer(data_queue: Queue):
             elif fault_type == "pressure":
                 pressure += random.uniform(1.5, 2.5)
 
-        # Pack raw streaming metrics
         data_packet = {
             "timestamp": time.time(),
             "temperature": round(temperature, 2),
@@ -41,4 +38,4 @@ def sensor_producer(data_queue: Queue):
         }
         
         data_queue.put(data_packet)
-        time.sleep(0.1) # 10Hz sampling rate
+        time.sleep(0.1)
